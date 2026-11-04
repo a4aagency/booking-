@@ -184,7 +184,7 @@ each("input[name=tipo]", function(el){ el.addEventListener("change", pintar); })
 each("input[name=artista]", function(el){ el.addEventListener("change", function(){ $("artistaSolicitado").value = el.value; $("artists").classList.remove("bad"); }); });
 pintar();
 
-var API = "https://script.google.com/macros/s/AKfycbzixQFIcOdh_gvTUcYJQ3atfVrFJLYmT5J29b1wi5K9GhUHTkEZia9VAFq89likD7pi3Q/exec";
+var API = "https://script.google.com/macros/s/AKfycbzUkAC9_4d5LNJPXr8hPpDEgH6qOCqc2hraf1aQKKH708QTRob5Ax0xtHgPzjEAQBORFQ/exec";
 // Fotos de los artistas (carpeta FOTOS FORMULARIO en Drive, servidas por el script)
 fetch(API + "?accion=fotos").then(function(r){ return r.json(); }).then(function(j){
   var fotos = j && j.fotos;
