@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Formulario de booking de A4A: datos del evento y del promotor para preparar el contrato de actuación.">
+<meta name="description" content="Formulario de booking de A4A: datos del evento, actuaciones y datos del promotor para preparar los contratos.">
 <meta name="robots" content="noindex">
 <title>Contrata a tu artista · A4A</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
 <style>
 /* Noche de club: fondo tinta, superficies algo más claras, acento oro flamenco */
 :root{
-  --night:#0f0e13; --panel:#18161f; --panel-2:#211e2a; --line:#302c3b;
+  --night:#0f0e13; --panel:#18161f; --panel-2:#211e2a; --panel-3:#2a2635; --line:#302c3b;
   --ink:#f4f0e8; --muted:#a59fae; --gold:#e9b44c; --gold-ink:#1b1407;
   --err:#ff8a80; --ok:#7bdca6;
   --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
@@ -33,9 +33,10 @@ header{padding:44px 0 6px;display:flex;flex-direction:column;gap:14px}
 .brand::before{content:"";width:28px;height:2px;background:var(--gold)}
 h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.9rem,5.4vw,3.1rem);line-height:1.05;letter-spacing:-.02em;margin:0;text-wrap:balance}
 h1 em{font-style:normal;color:var(--gold)}
-.lead{margin:0;color:var(--muted);max-width:58ch;font-size:1.02rem}
+.lead{margin:0;color:var(--muted);max-width:60ch;font-size:1.02rem}
 section{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:16px}
-.sh{display:flex;align-items:baseline;gap:12px}
+.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sh .sub{color:var(--muted);font-size:.86rem;flex-basis:100%;margin-left:40px;margin-top:-6px}
 .num{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-ink);background:var(--gold);border-radius:99px;min-width:28px;height:28px;display:grid;place-items:center;flex:none}
 h2{font-family:var(--f-display);font-weight:500;font-size:1.15rem;margin:0;letter-spacing:-.01em}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
@@ -50,22 +51,32 @@ textarea{min-height:96px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(233,180,76,.18)}
 .bad{border-color:var(--err)!important}
 
-/* Tarjetas de artista */
-.artists{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.artist{position:relative;display:block;border-radius:14px;overflow:hidden;cursor:pointer;aspect-ratio:4/5;background:var(--panel-2);border:1px solid var(--line);transition:transform .2s, box-shadow .2s, border-color .2s}
+/* Bloques de actuación */
+.acts{display:flex;flex-direction:column;gap:14px}
+.act{background:var(--panel-2);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.act.bad{border-color:var(--err)}
+.act-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.act-n{font-family:var(--f-display);font-weight:500;font-size:.95rem}
+.act-n small{font-family:var(--f-body);font-weight:600;color:var(--gold);font-size:.82rem;margin-left:8px}
+.rm{background:none;border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:7px 12px;font:600 .82rem var(--f-body);cursor:pointer;width:auto}
+.rm:hover{color:var(--err);border-color:var(--err)}
+.act input,.act select{background:var(--panel-3)}
+.artists{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.artist{position:relative;display:block;border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/5;background:var(--panel-3);border:1px solid var(--line);transition:transform .2s, box-shadow .2s, border-color .2s}
 .artist input{position:absolute;opacity:0;pointer-events:none}
-.artist .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:2.4rem;color:rgba(244,240,232,.18);background:linear-gradient(150deg,#2a2433,#16141c 70%)}
+.artist .ph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:2rem;color:rgba(244,240,232,.18);background:linear-gradient(150deg,#2a2433,#16141c 70%)}
 .artist img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s, transform .5s}
 .artist img.on{opacity:1}
-.artist::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,9,13,.92) 0%,rgba(10,9,13,.35) 38%,transparent 62%)}
-.artist .name{position:absolute;left:12px;right:12px;bottom:11px;z-index:1;font-family:var(--f-display);font-weight:700;font-size:1rem;line-height:1.1;letter-spacing:-.01em}
-.artist .check{position:absolute;top:10px;right:10px;z-index:1;width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--gold-ink);display:grid;place-items:center;font-weight:800;font-size:.9rem;transform:scale(0);transition:transform .2s}
+.artist::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,9,13,.92) 0%,rgba(10,9,13,.35) 40%,transparent 64%)}
+.artist .name{position:absolute;left:10px;right:10px;bottom:9px;z-index:1;font-family:var(--f-display);font-weight:700;font-size:.9rem;line-height:1.1}
+.artist .check{position:absolute;top:8px;right:8px;z-index:1;width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--gold-ink);display:grid;place-items:center;font-weight:800;font-size:.85rem;transform:scale(0);transition:transform .2s}
 .artist:hover{transform:translateY(-2px)}
-.artist:hover img.on{transform:scale(1.04)}
 .artist:has(input:checked){border-color:var(--gold);box-shadow:0 0 0 2px var(--gold),0 12px 30px -12px rgba(233,180,76,.45)}
 .artist:has(input:checked) .check{transform:scale(1)}
 .artist:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:3px}
-.artists.bad .artist{border-color:var(--err)}
+.add{display:flex;align-items:center;justify-content:center;gap:10px;background:transparent;border:1.5px dashed var(--gold);color:var(--gold);border-radius:14px;padding:15px;font:700 .98rem var(--f-body);cursor:pointer;width:100%}
+.add:hover{background:rgba(233,180,76,.08)}
+.add span{font-size:1.3rem;line-height:1}
 
 /* Autónomo / empresa */
 .seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -78,10 +89,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:.84rem;font-weight:500;color:var(--muted);cursor:pointer;line-height:1.5}
 .consent input{width:20px;height:20px;padding:0;margin:2px 0 0;flex:none;accent-color:var(--gold)}
 .send{display:flex;flex-direction:column;gap:12px}
-button{font:700 1rem var(--f-body);cursor:pointer;border-radius:14px;padding:16px 20px;border:0;background:var(--gold);color:var(--gold-ink);width:100%;letter-spacing:.01em;transition:transform .15s, filter .15s}
-button:hover{filter:brightness(1.06)}
-button:active{transform:translateY(1px)}
-button:disabled{opacity:.6;cursor:wait}
+.go{font:700 1rem var(--f-body);cursor:pointer;border-radius:14px;padding:16px 20px;border:0;background:var(--gold);color:var(--gold-ink);width:100%;letter-spacing:.01em;transition:transform .15s, filter .15s}
+.go:hover{filter:brightness(1.06)}
+.go:active{transform:translateY(1px)}
+.go:disabled{opacity:.6;cursor:wait}
 button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .msg{font-size:.92rem;min-height:1.4em;color:var(--muted)}
 .msg.err{color:var(--err)}
@@ -89,12 +100,12 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .done{text-align:center;padding:40px 22px;align-items:center}
 .done .big{width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--gold-ink);display:grid;place-items:center;font-size:1.8rem;font-weight:800}
 .done h2{font-size:1.6rem;font-weight:700}
-.done p{margin:0;color:var(--muted);max-width:44ch}
-.done .sum{color:var(--ink);font-weight:600}
+.done p{margin:0;color:var(--muted);max-width:46ch}
+.done ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;color:var(--ink);font-weight:600}
 footer{color:#6f6979;font-size:.78rem;text-align:center;padding-top:6px}
 [hidden]{display:none!important}
 @media (max-width:720px){.artists{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){.grid,.seg{grid-template-columns:minmax(0,1fr)} section{padding:18px} header{padding-top:30px}}
+@media (max-width:560px){.grid,.seg{grid-template-columns:minmax(0,1fr)} section{padding:18px} .act{padding:14px} header{padding-top:30px} .sh .sub{margin-left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -102,33 +113,26 @@ footer{color:#6f6979;font-size:.78rem;text-align:center;padding-top:6px}
 <div class="wrap">
   <header>
     <div class="brand">A4A · Booking</div>
-    <h1>Lleva a tu artista <em>a tu escenario</em></h1>
-    <p class="lead">Rellena este formulario con los datos del evento y los tuyos. Con ellos preparamos el contrato de actuación y te lo enviamos para firmar.</p>
+    <h1>Lleva a tus artistas <em>a tu escenario</em></h1>
+    <p class="lead">Rellena los datos del evento, añade cada actuación (puedes contratar varios artistas y varias fechas) y completa tus datos. Con ellos preparamos los contratos y te los enviamos para firmar.</p>
   </header>
 
   <form id="frm" novalidate>
     <div style="display:flex;flex-direction:column;gap:22px">
       <section>
-        <div class="sh"><span class="num">1</span><h2>Elige artista</h2></div>
-        <div class="artists" id="artists" role="radiogroup" aria-label="Artista">
-          <label class="artist"><input type="radio" name="artista" value="ZAGALILLO"><span class="ph">EZ</span><img alt="" data-k="ZAGALILLO"><span class="check">✓</span><span class="name">El Zagalillo</span></label>
-          <label class="artist"><input type="radio" name="artista" value="FAFA"><span class="ph">F</span><img alt="" data-k="FAFA"><span class="check">✓</span><span class="name">Fafa</span></label>
-          <label class="artist"><input type="radio" name="artista" value="SKOLL B"><span class="ph">SB</span><img alt="" data-k="SKOLL B"><span class="check">✓</span><span class="name">Skoll B</span></label>
-          <label class="artist"><input type="radio" name="artista" value="ADRI ROSES"><span class="ph">AR</span><img alt="" data-k="ADRI ROSES"><span class="check">✓</span><span class="name">Adri Roses</span></label>
+        <div class="sh"><span class="num">1</span><h2>El evento</h2></div>
+        <div class="grid">
+          <div class="f"><label for="evento" class="req">Nombre del evento</label><input id="evento" required></div>
+          <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required></div>
+          <div class="f"><label for="ciudad" class="req">Ciudad</label><input id="ciudad" required></div>
+          <div class="f"><label for="direccion" class="req">Dirección del recinto</label><input id="direccion" required placeholder="Calle, número, código postal y localidad"></div>
         </div>
-        <input type="hidden" id="artistaSolicitado">
       </section>
 
       <section>
-        <div class="sh"><span class="num">2</span><h2>El evento</h2></div>
-        <div class="grid">
-          <div class="f"><label for="evento" class="req">Nombre del evento</label><input id="evento" required></div>
-          <div class="f"><label for="fechaEvento" class="req">Fecha de la actuación</label><input id="fechaEvento" type="date" required></div>
-          <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required></div>
-          <div class="f"><label for="ciudad" class="req">Ciudad</label><input id="ciudad" required></div>
-          <div class="f full"><label for="direccion" class="req">Dirección del recinto</label><input id="direccion" required placeholder="Calle, número, código postal y localidad"></div>
-          <div class="f full"><label for="horario" class="req">Horario de la actuación</label><input id="horario" required placeholder="Ej.: de 00:30 a 02:00 h"></div>
-        </div>
+        <div class="sh"><span class="num">2</span><h2>Actuaciones</h2><span class="sub">Una por cada artista y fecha. Cada actuación nueva copia la anterior: cambia solo lo que sea distinto.</span></div>
+        <div class="acts" id="acts"></div>
+        <button type="button" class="add" id="add"><span>+</span> Añadir otra actuación</button>
       </section>
 
       <section>
@@ -152,10 +156,10 @@ footer{color:#6f6979;font-size:.78rem;text-align:center;padding-top:6px}
 
       <section class="send">
         <label class="consent"><input type="checkbox" id="consent">
-          <span>Acepto que WEARE A4A S.L. trate estos datos con la única finalidad de preparar y gestionar el contrato de actuación, conforme al Reglamento (UE) 2016/679 y la Ley Orgánica 3/2018. Puedo ejercer mis derechos de acceso, rectificación, supresión y demás escribiendo a legal@a4a.es.</span></label>
+          <span>Acepto que WEARE A4A S.L. trate estos datos con la única finalidad de preparar y gestionar los contratos de actuación, conforme al Reglamento (UE) 2016/679 y la Ley Orgánica 3/2018. Puedo ejercer mis derechos de acceso, rectificación, supresión y demás escribiendo a legal@a4a.es.</span></label>
         <input type="text" id="web" name="web" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="msg" id="msg" role="status"></div>
-        <button type="submit" id="btn">Enviar solicitud</button>
+        <button type="submit" class="go" id="btn">Enviar solicitud</button>
       </section>
     </div>
   </form>
@@ -163,70 +167,151 @@ footer{color:#6f6979;font-size:.78rem;text-align:center;padding-top:6px}
   <section class="done" id="done" hidden>
     <div class="big">✓</div>
     <h2>¡Solicitud recibida!</h2>
-    <p class="sum" id="sum"></p>
-    <p>Preparamos el contrato y te lo enviamos para la firma. Si necesitas cambiar algo, responde al email que te enviaremos.</p>
+    <ul id="sum"></ul>
+    <p>Preparamos los contratos y te los enviamos para la firma. Si necesitas cambiar algo, responde al email que te enviaremos.</p>
   </section>
 
   <footer>WEARE A4A S.L. · Representación de artistas</footer>
 </div>
-<script>
-var $ = function(id){ return document.getElementById(id); };
-var each = function(sel, fn){ Array.prototype.forEach.call(document.querySelectorAll(sel), fn); };
-var MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 
+<template id="tplAct">
+  <div class="act">
+    <div class="act-h"><span class="act-n">Actuación <b class="n">1</b><small class="who"></small></span><button type="button" class="rm">Quitar</button></div>
+    <div class="artists" role="radiogroup" aria-label="Artista">
+      <label class="artist"><input type="radio" value="ZAGALILLO"><span class="ph">EZ</span><img alt="" data-k="ZAGALILLO"><span class="check">✓</span><span class="name">El Zagalillo</span></label>
+      <label class="artist"><input type="radio" value="FAFA"><span class="ph">F</span><img alt="" data-k="FAFA"><span class="check">✓</span><span class="name">Fafa</span></label>
+      <label class="artist"><input type="radio" value="SKOLL B"><span class="ph">SB</span><img alt="" data-k="SKOLL B"><span class="check">✓</span><span class="name">Skoll B</span></label>
+      <label class="artist"><input type="radio" value="ADRI ROSES"><span class="ph">AR</span><img alt="" data-k="ADRI ROSES"><span class="check">✓</span><span class="name">Adri Roses</span></label>
+    </div>
+    <div class="grid">
+      <div class="f"><label class="req">Fecha de la actuación</label><input type="date" data-f="fechaEvento"></div>
+      <div class="f"><label class="req">Horario de la actuación</label><input data-f="horario" placeholder="Ej.: de 00:30 a 02:00 h"></div>
+      <div class="f"><label class="req">Fecha de la prueba de sonido</label><input type="date" data-f="fechaPrueba"><span class="hint">Por defecto, el mismo día de la actuación</span></div>
+      <div class="f"><label class="req">Hora de la prueba de sonido</label><input type="time" data-f="horaPrueba" value="22:00"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+var API = "https://script.google.com/macros/s/AKfycbzUkAC9_4d5LNJPXr8hPpDEgH6qOCqc2hraf1aQKKH708QTRob5Ax0xtHgPzjEAQBORFQ/exec";
+var GAS = (typeof google !== "undefined" && google.script && google.script.run) ? google.script.run : null;
+var $ = function(id){ return document.getElementById(id); };
+var each = function(sel, fn, root){ Array.prototype.forEach.call((root||document).querySelectorAll(sel), fn); };
+var MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+var NOMBRES = {"ZAGALILLO":"El Zagalillo","FAFA":"Fafa","SKOLL B":"Skoll B","ADRI ROSES":"Adri Roses"};
+var FOTOS = null, uid = 0;
+
+function fechaTxt(iso){ if(!iso) return ""; var p = iso.split("-"); return Number(p[2]) + " de " + MESES[Number(p[1])-1] + " de " + p[0]; }
 function tipo(){ return $("tAut").checked ? "autonomo" : "sociedad"; }
-function pintar(){
+function pintarTipo(){
   var aut = tipo()==="autonomo";
   each(".soc", function(el){ el.hidden = aut; });
   $("lblDom").textContent = aut ? "Domicilio" : "Domicilio social";
 }
-each("input[name=tipo]", function(el){ el.addEventListener("change", pintar); });
-each("input[name=artista]", function(el){ el.addEventListener("change", function(){ $("artistaSolicitado").value = el.value; $("artists").classList.remove("bad"); }); });
-pintar();
+each("input[name=tipo]", function(el){ el.addEventListener("change", pintarTipo); });
+pintarTipo();
 
-var API = "https://script.google.com/macros/s/AKfycbzUkAC9_4d5LNJPXr8hPpDEgH6qOCqc2hraf1aQKKH708QTRob5Ax0xtHgPzjEAQBORFQ/exec";
-// Fotos de los artistas (carpeta FOTOS FORMULARIO en Drive, servidas por el script)
-fetch(API + "?accion=fotos").then(function(r){ return r.json(); }).then(function(j){
-  var fotos = j && j.fotos;
+// ---- Fotos (carpeta FOTOS FORMULARIO en Drive, servidas por el script) ----
+function ponerFotos(root){
+  if(!FOTOS) return;
   each(".artist img", function(img){
-    var src = fotos && fotos[img.getAttribute("data-k")];
-    if(src){ img.onload = function(){ img.classList.add("on"); }; img.src = src; }
-  });
-}).catch(function(){});
+    var src = FOTOS[img.getAttribute("data-k")];
+    if(src && !img.src){ img.onload = function(){ img.classList.add("on"); }; img.src = src; }
+  }, root);
+}
+function recibirFotos(f){ FOTOS = f || {}; ponerFotos(document); }
+if(GAS){ try{ google.script.run.withSuccessHandler(recibirFotos).withFailureHandler(function(){}).obtenerFotos(); }catch(e){} }
+else { fetch(API + "?accion=fotos").then(function(r){ return r.json(); }).then(function(j){ recibirFotos(j && j.fotos); }).catch(function(){}); }
 
-var CAMPOS = ["trato","promNombre","promDni","promEmpresa","promCif","promDomicilio","promEmail","promMovil","artistaSolicitado","ciudad","recinto","evento","direccion","fechaEvento","horario","observaciones"];
-var OBLIG = ["promNombre","promDni","promDomicilio","promEmail","promMovil","ciudad","recinto","evento","direccion","fechaEvento","horario"];
+// ---- Bloques de actuación ----
+function campo(act, f){ return act.querySelector('[data-f="'+f+'"]'); }
+function renumerar(){
+  var acts = document.querySelectorAll(".act");
+  each(".act", function(a, i){
+    a.querySelector(".n").textContent = i+1;
+    a.querySelector(".rm").hidden = acts.length === 1;
+  });
+}
+function nombreArtista(act){ var r = act.querySelector("input[type=radio]:checked"); return r ? NOMBRES[r.value] : ""; }
+function addAct(copiarDe){
+  var node = $("tplAct").content.firstElementChild.cloneNode(true);
+  var name = "art" + (++uid);
+  each("input[type=radio]", function(r){ r.name = name; }, node);
+  var fp = campo(node, "fechaPrueba"), fe = campo(node, "fechaEvento");
+  node._pruebaManual = false;
+  if(copiarDe){
+    ["fechaEvento","horario","fechaPrueba","horaPrueba"].forEach(function(f){ campo(node, f).value = campo(copiarDe, f).value; });
+    node._pruebaManual = copiarDe._pruebaManual;
+  }
+  fe.addEventListener("input", function(){ if(!node._pruebaManual) fp.value = fe.value; node.classList.remove("bad"); });
+  fp.addEventListener("input", function(){ node._pruebaManual = !!fp.value && fp.value !== fe.value; if(!fp.value){ fp.value = fe.value; node._pruebaManual = false; } });
+  each("input[type=radio]", function(r){ r.addEventListener("change", function(){ node.querySelector(".who").textContent = nombreArtista(node); node.classList.remove("bad"); }); }, node);
+  node.querySelector(".rm").addEventListener("click", function(){ node.remove(); renumerar(); });
+  $("acts").appendChild(node);
+  ponerFotos(node);
+  renumerar();
+  return node;
+}
+addAct(null);
+$("add").addEventListener("click", function(){
+  var all = document.querySelectorAll(".act");
+  var nuevo = addAct(all[all.length-1]);
+  nuevo.scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+// ---- Envío ----
+var CAMPOS = ["trato","promNombre","promDni","promEmpresa","promCif","promDomicilio","promEmail","promMovil","evento","recinto","ciudad","direccion","observaciones"];
+var OBLIG = ["promNombre","promDni","promDomicilio","promEmail","promMovil","evento","recinto","ciudad","direccion"];
 
 $("frm").addEventListener("submit", function(ev){
   ev.preventDefault();
   var d = { tipo: tipo() };
   CAMPOS.forEach(function(k){ d[k] = $(k).value.trim(); });
   var oblig = OBLIG.concat(d.tipo==="sociedad" ? ["promEmpresa","promCif"] : []);
-  var faltan = [];
+  var primero = null, faltaArtista = false;
   CAMPOS.forEach(function(k){ $(k).classList.remove("bad"); });
-  if(!d.artistaSolicitado){ faltan.push("artists"); $("artists").classList.add("bad"); }
-  oblig.forEach(function(k){ if(!d[k]){ faltan.push(k); $(k).classList.add("bad"); } });
-  if(d.promEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.promEmail)){ faltan.push("promEmail"); $("promEmail").classList.add("bad"); }
+  oblig.forEach(function(k){ if(!d[k]){ $(k).classList.add("bad"); primero = primero || $(k); } });
+  if(d.promEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.promEmail)){ $("promEmail").classList.add("bad"); primero = primero || $("promEmail"); }
+
+  d.actuaciones = [];
+  each(".act", function(a){
+    var r = a.querySelector("input[type=radio]:checked");
+    var x = { artistaSolicitado: r ? r.value : "" };
+    ["fechaEvento","horario","fechaPrueba","horaPrueba"].forEach(function(f){ x[f] = campo(a, f).value.trim(); campo(a, f).classList.remove("bad"); });
+    if(!x.fechaPrueba) x.fechaPrueba = x.fechaEvento;
+    var mal = false;
+    if(!x.artistaSolicitado){ mal = true; faltaArtista = true; }
+    ["fechaEvento","horario","horaPrueba"].forEach(function(f){ if(!x[f]){ campo(a, f).classList.add("bad"); mal = true; } });
+    a.classList.toggle("bad", mal);
+    if(mal) primero = primero || a;
+    d.actuaciones.push(x);
+  });
+
   var msg = $("msg"); msg.className = "msg err";
-  if(faltan.length){
-    msg.textContent = faltan[0]==="artists" ? "Elige el artista que quieres contratar." : "Revisa los campos marcados en rojo.";
-    var first = $(faltan[0]); first.scrollIntoView({behavior:"smooth", block:"center"}); if(first.focus && faltan[0]!=="artists") first.focus({preventScroll:true});
+  if(primero){
+    msg.textContent = faltaArtista ? "Elige el artista en cada actuación y revisa los campos marcados en rojo." : "Revisa los campos marcados en rojo.";
+    primero.scrollIntoView({behavior:"smooth", block:"center"});
     return;
   }
   if(!$("consent").checked){ msg.textContent = "Marca la casilla de protección de datos para poder enviar."; return; }
   if(d.tipo==="autonomo"){ d.promEmpresa=""; d.promCif=""; }
   msg.className = "msg"; msg.textContent = "Enviando…"; $("btn").disabled = true;
+
   var enviado = function(){
-      var nombre = document.querySelector("input[name=artista]:checked").parentNode.querySelector(".name").textContent;
-      var p = d.fechaEvento.split("-");
-      $("sum").textContent = nombre + " · " + Number(p[2]) + " de " + MESES[Number(p[1])-1] + " de " + p[0] + " · " + d.recinto + ", " + d.ciudad;
-      $("frm").hidden = true; $("done").hidden = false; window.scrollTo(0,0);
+    var ul = $("sum"); ul.innerHTML = "";
+    d.actuaciones.forEach(function(x){ var li = document.createElement("li"); li.textContent = NOMBRES[x.artistaSolicitado] + " · " + fechaTxt(x.fechaEvento) + " · " + x.horario; ul.appendChild(li); });
+    var li = document.createElement("li"); li.style.color = "var(--muted)"; li.style.fontWeight = "500"; li.textContent = d.recinto + ", " + d.ciudad; ul.appendChild(li);
+    $("frm").hidden = true; $("done").hidden = false; window.scrollTo(0,0);
   };
   var fallo = function(t){ $("btn").disabled = false; msg.className = "msg err"; msg.textContent = "No se ha podido enviar. Inténtalo de nuevo en unos segundos." + (t ? " (" + t + ")" : ""); };
-  fetch(API, { method: "POST", body: JSON.stringify({ accion: "solicitud", web: $("web").value, datos: d }) })
-    .then(function(r){ return r.json(); })
-    .then(function(j){ if(j && j.ok) enviado(); else fallo(j && j.error); })
-    .catch(function(){ fallo("sin conexión"); });
+  if(GAS){
+    google.script.run.withSuccessHandler(enviado).withFailureHandler(function(e){ fallo(e && e.message ? e.message : String(e)); }).guardarSolicitud(d);
+  } else {
+    fetch(API, { method: "POST", body: JSON.stringify({ accion: "solicitud", web: $("web").value, datos: d }) })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(j && j.ok) enviado(); else fallo(j && j.error); })
+      .catch(function(){ fallo("sin conexión"); });
+  }
 });
 </script>
 </body>
