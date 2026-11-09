@@ -417,14 +417,14 @@ footer a{color:inherit}
         <div class="seg" role="radiogroup" aria-label="Contratas como">
           <label><input type="radio" name="tipo" value="sociedad" id="tSoc" checked>Empresa<span>S.L., S.A. u otra sociedad</span></label>
           <label><input type="radio" name="tipo" value="autonomo" id="tAut">Autónomo<span>Persona física</span></label>
-          <label><input type="radio" name="tipo" value="ayuntamiento" id="tAyto">Ayuntamiento<span>Entidad local</span></label>
+          <label><input type="radio" name="tipo" value="ayuntamiento" id="tAyto">Ente público<span>Administración pública</span></label>
         </div>
 
         <div class="grid">
           <!-- Ayuntamiento: la entidad -->
-          <div class="sub-h ayto">El ayuntamiento</div>
-          <div class="f ayto"><label for="aytoMunicipio" class="req">Municipio</label><input id="aytoMunicipio" placeholder="Ej.: Albolote"><span class="hint">En el contrato saldrá «AYUNTAMIENTO DE …»</span></div>
-          <div class="f ayto"><label for="aytoNif" class="req">NIF del ayuntamiento</label><input id="aytoNif" placeholder="P1800400A"></div>
+          <div class="sub-h ayto">El ente público</div>
+          <div class="f ayto"><label for="aytoMunicipio" class="req">Municipio</label><input id="aytoMunicipio" placeholder="Ej.: Albolote"><span class="hint">Municipio de la entidad</span></div>
+          <div class="f ayto"><label for="aytoNif" class="req">NIF del ente público</label><input id="aytoNif" placeholder="P1800400A"></div>
           <div class="f full ayto"><label for="aytoSede" class="req">Sede</label><input id="aytoSede" placeholder="Plaza, número, código postal, municipio y provincia"></div>
 
           <div class="sub-h ayto">Quién firma</div>
@@ -442,7 +442,7 @@ footer a{color:inherit}
           <div class="f full soc"><label for="promEmpresa" class="req">Razón social</label><input id="promEmpresa" autocomplete="organization"><span class="hint">Tal como figura en el CIF</span></div>
           <div class="f full soc aut"><label for="promDomicilio" class="req" id="lblDom">Domicilio social</label><input id="promDomicilio" placeholder="Calle, número, código postal, ciudad y provincia"></div>
 
-          <div class="sub-h ayto">Datos para la factura</div>
+          <div class="sub-h ayto">Datos para la factura (opcional)</div>
           <div class="note ayto">La factura se presenta por FACe tras la actuación. Si ahora no tienes estos datos, déjalos en blanco y te los pediremos antes de enviar el contrato.</div>
           <div class="f full ayto"><label for="partidaPresupuestaria">Aplicación presupuestaria</label><input id="partidaPresupuestaria" placeholder="Ej.: 338.226.09"></div>
           <div class="ayto full grid g3" style="gap:16px 18px">
