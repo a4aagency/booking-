@@ -52,6 +52,7 @@ h2{font-weight:900;font-size:clamp(24px,3.4vw,34px);margin:0;letter-spacing:-.04
 label,.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#e6e6df}
 .req::after{content:" *";color:var(--acid)}
 .hint{font-size:13px;color:var(--dim);line-height:1.45}
+.hint.err{color:var(--err);font-weight:700}
 input,select,textarea{font:500 16px/1.4 var(--f-body);color:var(--fg);background:var(--panel-2);border:1px solid var(--line);border-radius:0;
   padding:13px 14px;width:100%;min-width:0;transition:border-color .15s,background .15s;-webkit-appearance:none;appearance:none}
 select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
@@ -398,15 +399,16 @@ footer a{color:inherit}
       <section class="b">
         <div class="sh"><span class="num">01</span><h2>El evento</h2></div>
         <div class="grid">
-          <div class="f"><label for="evento" class="req">Nombre del evento</label><input id="evento" required></div>
-          <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required></div>
-          <div class="f"><label for="ciudad" class="req">Municipio</label><input id="ciudad" required autocomplete="address-level2"></div>
-          <div class="f"><label for="provincia" class="req">Provincia</label><input id="provincia" required autocomplete="address-level1"></div>
+          <div class="f"><label for="evento" class="req">Nombre del evento</label><input id="evento" required placeholder="Ej.: Noches de Luna Nueva 2027"><span class="hint" id="eventoHint">Obligatorio: sin el nombre del evento no se puede enviar la solicitud.</span></div>
+          <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required placeholder="Ej.: Sala Aurora Club"></div>
+          <div class="f"><label for="ciudad" class="req">Municipio</label><input id="ciudad" required autocomplete="address-level2" placeholder="Ej.: Alcobendas"></div>
+          <div class="f"><label for="provincia" class="req">Provincia</label><input id="provincia" required autocomplete="address-level1" placeholder="Ej.: Madrid"></div>
           <div class="sub-h">Dirección del recinto</div>
           <div class="f"><label for="dirVia" class="req">Tipo de vía</label><select id="dirVia"><option value="">Elige una…</option><option>Calle</option><option>Avenida</option><option>Plaza</option><option value="otro">Otro</option></select></div>
           <div class="f" id="dirOtroBox" hidden><label for="dirOtro" class="req">¿Qué tipo de vía?</label><input id="dirOtro" placeholder="Ej.: Paseo, Camino, Carretera, Polígono"></div>
-          <div class="f"><label for="dirNombre" class="req">Nombre de la vía</label><input id="dirNombre" placeholder="Ej.: Motril"></div>
-          <div class="f"><label for="dirNumero" class="req">Número</label><input id="dirNumero" placeholder="Ej.: 234 · «s/n» si no tiene"></div>
+          <div class="f"><label for="dirNombre" class="req">Nombre de la vía</label><input id="dirNombre" placeholder="Ej.: de los Almendros"></div>
+          <div class="f"><label for="dirNumero" class="req">Número</label><input id="dirNumero" placeholder="Ej.: 14 · «s/n» si no tiene"></div>
+          <div class="f"><label for="codigoPostal" class="req">Código postal</label><input id="codigoPostal" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="Ej.: 28108"></div>
         </div>
       </section>
 
@@ -427,37 +429,37 @@ footer a{color:inherit}
         <div class="grid">
           <!-- Ayuntamiento: la entidad -->
           <div class="sub-h ayto">El ente público</div>
-          <div class="f ayto"><label for="aytoMunicipio" class="req">Municipio</label><input id="aytoMunicipio" placeholder="Ej.: Albolote"><span class="hint">Municipio de la entidad</span></div>
-          <div class="f ayto"><label for="aytoNif" class="req">NIF del ente público</label><input id="aytoNif" placeholder="P1800400A"></div>
-          <div class="f full ayto"><label for="aytoSede" class="req">Sede</label><input id="aytoSede" placeholder="Plaza, número, código postal, municipio y provincia"></div>
+          <div class="f ayto"><label for="aytoMunicipio" class="req">Municipio</label><input id="aytoMunicipio" placeholder="Ej.: Llanes"><span class="hint">Municipio de la entidad</span></div>
+          <div class="f ayto"><label for="aytoNif" class="req">NIF del ente público</label><input id="aytoNif" placeholder="Ej.: P3398765K"></div>
+          <div class="f full ayto"><label for="aytoSede" class="req">Sede</label><input id="aytoSede" placeholder="Ej.: Plaza del Ayuntamiento 3, 33500 Llanes (Asturias)"></div>
 
           <div class="sub-h ayto">Quién firma</div>
           <div class="sub-h soc">Administrador y empresa</div>
           <div class="sub-h aut">Tus datos</div>
           <div class="f"><label for="trato">Tratamiento</label><select id="trato"><option>D.</option><option>Dña.</option></select></div>
-          <div class="f"><label for="promNombre" class="req">Nombre y apellidos</label><input id="promNombre" autocomplete="name"></div>
-          <div class="f"><label for="promDni" class="req">DNI / NIE</label><input id="promDni"></div>
+          <div class="f"><label for="promNombre" class="req">Nombre y apellidos</label><input id="promNombre" autocomplete="name" placeholder="Ej.: Laura Martín Rivas"></div>
+          <div class="f"><label for="promDni" class="req">DNI / NIE</label><input id="promDni" placeholder="Ej.: 12345678Z"></div>
           <div class="f ayto"><label for="cargoTipo" class="req">Cargo</label><select id="cargoTipo"><option value="alcalde">Alcalde/sa-Presidente/a</option><option value="concejal">Concejal/a delegado/a</option></select></div>
-          <div class="f ayto conc"><label for="cargoArea" class="req">Concejalía</label><input id="cargoArea" placeholder="Ej.: Cultura y Fiestas"></div>
-          <div class="f ayto conc"><label for="decretoNum" class="req">Nº del decreto de delegación</label><input id="decretoNum" placeholder="Ej.: 2025/412"></div>
+          <div class="f ayto conc"><label for="cargoArea" class="req">Concejalía</label><input id="cargoArea" placeholder="Ej.: Cultura y Festejos"></div>
+          <div class="f ayto conc"><label for="decretoNum" class="req">Nº del decreto de delegación</label><input id="decretoNum" placeholder="Ej.: 2026/057"></div>
           <div class="f ayto conc"><label for="decretoFecha" class="req">Fecha del decreto</label><input id="decretoFecha" type="date"></div>
 
-          <div class="f soc"><label for="promCif" class="req">CIF de la empresa</label><input id="promCif"></div>
-          <div class="f full soc"><label for="promEmpresa" class="req">Razón social</label><input id="promEmpresa" autocomplete="organization"><span class="hint">Tal como figura en el CIF</span></div>
-          <div class="f full soc aut"><label for="promDomicilio" class="req" id="lblDom">Domicilio social</label><input id="promDomicilio" placeholder="Calle, número, código postal, ciudad y provincia"></div>
+          <div class="f soc"><label for="promCif" class="req">CIF de la empresa</label><input id="promCif" placeholder="Ej.: B12345678"></div>
+          <div class="f full soc"><label for="promEmpresa" class="req">Razón social</label><input id="promEmpresa" autocomplete="organization" placeholder="Ej.: Producciones Luna Nueva S.L."><span class="hint">Tal como figura en el CIF</span></div>
+          <div class="f full soc aut"><label for="promDomicilio" class="req" id="lblDom">Domicilio social</label><input id="promDomicilio" placeholder="Ej.: Calle de los Almendros 14, 28108 Alcobendas (Madrid)"></div>
 
           <div class="sub-h ayto">Datos para la factura (opcional)</div>
           <div class="note ayto">La factura se presenta por FACe tras la actuación. Si ahora no tienes estos datos, déjalos en blanco y te los pediremos antes de enviar el contrato.</div>
-          <div class="f full ayto"><label for="partidaPresupuestaria">Aplicación presupuestaria</label><input id="partidaPresupuestaria" placeholder="Ej.: 338.226.09"></div>
+          <div class="f full ayto"><label for="partidaPresupuestaria">Aplicación presupuestaria</label><input id="partidaPresupuestaria" placeholder="Ej.: 334.226.10"></div>
           <div class="ayto full grid g3" style="gap:16px 18px">
-            <div class="f"><label for="dir3OficinaContable">DIR3 · Oficina contable</label><input id="dir3OficinaContable" placeholder="Ej.: L01180040"></div>
-            <div class="f"><label for="dir3OrganoGestor">DIR3 · Órgano gestor</label><input id="dir3OrganoGestor" placeholder="Ej.: L01180040"></div>
-            <div class="f"><label for="dir3UnidadTramitadora">DIR3 · Unidad tramitadora</label><input id="dir3UnidadTramitadora" placeholder="Ej.: L01180040"></div>
+            <div class="f"><label for="dir3OficinaContable">DIR3 · Oficina contable</label><input id="dir3OficinaContable" placeholder="Ej.: L01339876"></div>
+            <div class="f"><label for="dir3OrganoGestor">DIR3 · Órgano gestor</label><input id="dir3OrganoGestor" placeholder="Ej.: L01339876"></div>
+            <div class="f"><label for="dir3UnidadTramitadora">DIR3 · Unidad tramitadora</label><input id="dir3UnidadTramitadora" placeholder="Ej.: L01339876"></div>
           </div>
 
           <div class="sub-h">Contacto</div>
-          <div class="f"><label for="promEmail" class="req">Email</label><input id="promEmail" type="email" autocomplete="email" inputmode="email"></div>
-          <div class="f"><label for="promMovil" class="req">Móvil</label><input id="promMovil" type="tel" autocomplete="tel" inputmode="tel"></div>
+          <div class="f"><label for="promEmail" class="req">Email</label><input id="promEmail" type="email" autocomplete="email" inputmode="email" placeholder="Ej.: laura@lunanueva.es"></div>
+          <div class="f"><label for="promMovil" class="req">Móvil</label><input id="promMovil" type="tel" autocomplete="tel" inputmode="tel" placeholder="Ej.: 600 123 456"></div>
           <div class="f full"><label for="observaciones">Observaciones</label><textarea id="observaciones" placeholder="Cualquier cosa que debamos saber (opcional)"></textarea></div>
         </div>
       </section>
@@ -492,7 +494,7 @@ footer a{color:inherit}
       <div class="f"><label class="req">Hora de inicio de la actuación</label><input type="time" data-f="horaInicio"></div>
       <div class="f"><label>Hora de fin de la actuación</label><input type="time" data-f="horaFin"><span class="hint fin">Si la dejas vacía, contamos 90 minutos desde el inicio</span></div>
       <div class="f"><label class="req">Fecha de la prueba de sonido</label><input type="date" data-f="fechaPrueba"><span class="hint">Por defecto, el mismo día de la actuación</span></div>
-      <div class="f"><label class="req">Hora de la prueba de sonido</label><input type="time" data-f="horaPrueba" value="22:00"></div>
+      <div class="f"><label class="req">Hora de la prueba de sonido</label><input type="time" data-f="horaPrueba" value="22:00"><span class="hint">Por defecto, a las 22:00. Cámbiala si es otra hora.</span></div>
     </div>
   </div>
 </template>
@@ -578,6 +580,9 @@ function horarioTexto(inicio, finH){
   return "de " + hm(a) + " hasta las " + hm(b);
 }
 
+$("evento").addEventListener("input", function(){ if(this.value.trim()){ $("eventoHint").className = "hint"; $("eventoHint").textContent = "Obligatorio: sin el nombre del evento no se puede enviar la solicitud."; this.classList.remove("bad"); } });
+$("codigoPostal").addEventListener("input", function(){ this.value = this.value.replace(/\D/g, "").slice(0, 5); });
+
 // ---- Dirección del recinto: tipo de vía + nombre + número (+ municipio y provincia) ----
 $("dirVia").addEventListener("change", function(){ $("dirOtroBox").hidden = $("dirVia").value !== "otro"; if(this.value) this.classList.remove("bad"); });
 function direccionTexto(d){
@@ -585,7 +590,7 @@ function direccionTexto(d){
   var num = $("dirNumero").value.trim().replace(/^n[º°o.]?\s*/i, "");
   num = /^s\/?n$/i.test(num) ? "s/n" : "nº " + num;
   d.direccionVia = via; d.direccionNombre = $("dirNombre").value.trim(); d.direccionNumero = num;
-  return via + " " + d.direccionNombre + ", " + num + ", " + d.ciudad + (d.provincia ? " (" + d.provincia + ")" : "");
+  return via + " " + d.direccionNombre + ", " + num + ", " + (d.codigoPostal ? d.codigoPostal + " " : "") + d.ciudad + (d.provincia ? " (" + d.provincia + ")" : "");
 }
 
 // ---- Cargo del firmante del ayuntamiento (texto que va al contrato) ----
@@ -598,13 +603,13 @@ function cargoTexto(d){
 }
 
 // ---- Envío ----
-var COMUNES = ["trato","promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","observaciones"];
+var COMUNES = ["trato","promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","codigoPostal","observaciones"];
 var POR_TIPO = {
   sociedad: ["promEmpresa","promCif","promDomicilio"],
   autonomo: ["promDomicilio"],
   ayuntamiento: ["aytoMunicipio","aytoNif","aytoSede","partidaPresupuestaria","dir3OficinaContable","dir3OrganoGestor","dir3UnidadTramitadora"]
 };
-var OBLIG = ["promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","dirVia","dirNombre","dirNumero"];
+var OBLIG = ["promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","codigoPostal","dirVia","dirNombre","dirNumero"];
 var OBLIG_TIPO = { sociedad:["promEmpresa","promCif","promDomicilio"], autonomo:["promDomicilio"], ayuntamiento:["aytoMunicipio","aytoNif","aytoSede"] };
 
 $("frm").addEventListener("submit", function(ev){
@@ -618,6 +623,7 @@ $("frm").addEventListener("submit", function(ev){
   var primero = null, faltaArtista = false;
   each("#frm input, #frm select, #frm textarea", function(el){ el.classList.remove("bad"); });
   oblig.forEach(function(k){ if(!$(k).value.trim()){ $(k).classList.add("bad"); primero = primero || $(k); } });
+  if(d.codigoPostal && !/^\d{5}$/.test(d.codigoPostal)){ $("codigoPostal").classList.add("bad"); primero = primero || $("codigoPostal"); }
   if(d.promEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.promEmail)){ $("promEmail").classList.add("bad"); primero = primero || $("promEmail"); }
   if(t === "ayuntamiento") d.firmanteCargo = cargoTexto(d);
   d.direccion = direccionTexto(d);
@@ -638,6 +644,15 @@ $("frm").addEventListener("submit", function(ev){
   });
 
   var msg = $("msg"); msg.className = "msg err";
+  var faltaEvento = !d.evento;
+  $("eventoHint").className = faltaEvento ? "hint err" : "hint";
+  $("eventoHint").textContent = faltaEvento ? "Falta el nombre del evento." : "Obligatorio: sin el nombre del evento no se puede enviar la solicitud.";
+  if(faltaEvento){
+    msg.textContent = "Falta el nombre del evento." + (primero !== $("evento") || document.querySelectorAll("#frm .bad").length > 1 ? " Revisa también los campos marcados en rojo." : "");
+    $("evento").scrollIntoView({behavior:"smooth", block:"center"}); $("evento").focus({preventScroll:true});
+    alert("Falta el nombre del evento. Escríbelo para poder enviar la solicitud.");
+    return;
+  }
   if(primero){
     msg.textContent = faltaArtista ? "Elige el artista en cada actuación y revisa los campos marcados en rojo." : "Revisa los campos marcados en rojo.";
     primero.scrollIntoView({behavior:"smooth", block:"center"});
