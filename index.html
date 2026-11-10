@@ -400,7 +400,7 @@ footer a{color:inherit}
         <div class="sh"><span class="num">01</span><h2>El evento</h2></div>
         <div class="grid">
           <div class="f"><label for="evento" class="req">Nombre del evento</label><input id="evento" required placeholder="Ej.: Noches de Luna Nueva 2027"><span class="hint" id="eventoHint">Obligatorio: sin el nombre del evento no se puede enviar la solicitud.</span></div>
-          <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required placeholder="Ej.: Sala Aurora Club"></div>
+          <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required placeholder="Nombre de la sala o recinto"></div>
           <div class="f"><label for="ciudad" class="req">Municipio</label><input id="ciudad" required autocomplete="address-level2" placeholder="Ej.: Alcobendas"></div>
           <div class="f"><label for="provincia" class="req">Provincia</label><input id="provincia" required autocomplete="address-level1" placeholder="Ej.: Madrid"></div>
           <div class="sub-h">Dirección del recinto</div>
@@ -429,37 +429,37 @@ footer a{color:inherit}
         <div class="grid">
           <!-- Ayuntamiento: la entidad -->
           <div class="sub-h ayto">El ente público</div>
-          <div class="f ayto"><label for="aytoMunicipio" class="req">Municipio</label><input id="aytoMunicipio" placeholder="Ej.: Llanes"><span class="hint">Municipio de la entidad</span></div>
-          <div class="f ayto"><label for="aytoNif" class="req">NIF del ente público</label><input id="aytoNif" placeholder="Ej.: P3398765K"></div>
-          <div class="f full ayto"><label for="aytoSede" class="req">Sede</label><input id="aytoSede" placeholder="Ej.: Plaza del Ayuntamiento 3, 33500 Llanes (Asturias)"></div>
+          <div class="f ayto"><label for="aytoMunicipio" class="req">Municipio</label><input id="aytoMunicipio" placeholder="Nombre del municipio"><span class="hint">Municipio de la entidad</span></div>
+          <div class="f ayto"><label for="aytoNif" class="req">NIF del ente público</label><input id="aytoNif" placeholder="Empieza por P, Q o S · sin espacios ni guiones"></div>
+          <div class="f full ayto"><label for="aytoSede" class="req">Sede</label><input id="aytoSede" placeholder="Vía y número, código postal, municipio (provincia)"></div>
 
           <div class="sub-h ayto">Quién firma</div>
           <div class="sub-h soc">Administrador y empresa</div>
           <div class="sub-h aut">Tus datos</div>
           <div class="f"><label for="trato">Tratamiento</label><select id="trato"><option>D.</option><option>Dña.</option></select></div>
-          <div class="f"><label for="promNombre" class="req">Nombre y apellidos</label><input id="promNombre" autocomplete="name" placeholder="Ej.: Laura Martín Rivas"></div>
-          <div class="f"><label for="promDni" class="req">DNI / NIE</label><input id="promDni" placeholder="Ej.: 12345678Z"></div>
+          <div class="f"><label for="promNombre" class="req">Nombre y apellidos</label><input id="promNombre" autocomplete="name" placeholder="Nombre y apellidos completos, como en el documento"></div>
+          <div class="f"><label for="promDni" class="req">DNI / NIE</label><input id="promDni" placeholder="DNI: 8 cifras y letra · NIE: letra, 7 cifras y letra"></div>
           <div class="f ayto"><label for="cargoTipo" class="req">Cargo</label><select id="cargoTipo"><option value="alcalde">Alcalde/sa-Presidente/a</option><option value="concejal">Concejal/a delegado/a</option></select></div>
           <div class="f ayto conc"><label for="cargoArea" class="req">Concejalía</label><input id="cargoArea" placeholder="Ej.: Cultura y Festejos"></div>
           <div class="f ayto conc"><label for="decretoNum" class="req">Nº del decreto de delegación</label><input id="decretoNum" placeholder="Ej.: 2026/057"></div>
           <div class="f ayto conc"><label for="decretoFecha" class="req">Fecha del decreto</label><input id="decretoFecha" type="date"></div>
 
-          <div class="f soc"><label for="promCif" class="req">CIF de la empresa</label><input id="promCif" placeholder="Ej.: B12345678"></div>
-          <div class="f full soc"><label for="promEmpresa" class="req">Razón social</label><input id="promEmpresa" autocomplete="organization" placeholder="Ej.: Producciones Luna Nueva S.L."><span class="hint">Tal como figura en el CIF</span></div>
-          <div class="f full soc aut"><label for="promDomicilio" class="req" id="lblDom">Domicilio social</label><input id="promDomicilio" placeholder="Ej.: Calle de los Almendros 14, 28108 Alcobendas (Madrid)"></div>
+          <div class="f soc"><label for="promCif" class="req">CIF de la empresa</label><input id="promCif" placeholder="Letra y 8 caracteres, sin espacios ni guiones"></div>
+          <div class="f full soc"><label for="promEmpresa" class="req">Razón social</label><input id="promEmpresa" autocomplete="organization" placeholder="Nombre completo de la empresa (S.L., S.A.…)"><span class="hint">Tal como figura en el CIF</span></div>
+          <div class="f full soc aut"><label for="promDomicilio" class="req" id="lblDom">Domicilio social</label><input id="promDomicilio" placeholder="Vía y número, código postal, municipio (provincia)"></div>
 
           <div class="sub-h ayto">Datos para la factura (opcional)</div>
           <div class="note ayto">La factura se presenta por FACe tras la actuación. Si ahora no tienes estos datos, déjalos en blanco y te los pediremos antes de enviar el contrato.</div>
           <div class="f full ayto"><label for="partidaPresupuestaria">Aplicación presupuestaria</label><input id="partidaPresupuestaria" placeholder="Ej.: 334.226.10"></div>
           <div class="ayto full grid g3" style="gap:16px 18px">
-            <div class="f"><label for="dir3OficinaContable">DIR3 · Oficina contable</label><input id="dir3OficinaContable" placeholder="Ej.: L01339876"></div>
-            <div class="f"><label for="dir3OrganoGestor">DIR3 · Órgano gestor</label><input id="dir3OrganoGestor" placeholder="Ej.: L01339876"></div>
-            <div class="f"><label for="dir3UnidadTramitadora">DIR3 · Unidad tramitadora</label><input id="dir3UnidadTramitadora" placeholder="Ej.: L01339876"></div>
+            <div class="f"><label for="dir3OficinaContable">DIR3 · Oficina contable</label><input id="dir3OficinaContable" placeholder="Código DIR3 que facilita el ente"></div>
+            <div class="f"><label for="dir3OrganoGestor">DIR3 · Órgano gestor</label><input id="dir3OrganoGestor" placeholder="Código DIR3 que facilita el ente"></div>
+            <div class="f"><label for="dir3UnidadTramitadora">DIR3 · Unidad tramitadora</label><input id="dir3UnidadTramitadora" placeholder="Código DIR3 que facilita el ente"></div>
           </div>
 
           <div class="sub-h">Contacto</div>
-          <div class="f"><label for="promEmail" class="req">Email</label><input id="promEmail" type="email" autocomplete="email" inputmode="email" placeholder="Ej.: laura@lunanueva.es"></div>
-          <div class="f"><label for="promMovil" class="req">Móvil</label><input id="promMovil" type="tel" autocomplete="tel" inputmode="tel" placeholder="Ej.: 600 123 456"></div>
+          <div class="f"><label for="promEmail" class="req">Email</label><input id="promEmail" type="email" autocomplete="email" inputmode="email" placeholder="Correo electrónico de contacto"></div>
+          <div class="f"><label for="promMovil" class="req">Móvil</label><input id="promMovil" type="tel" autocomplete="tel" inputmode="tel" placeholder="Número de móvil de contacto"></div>
           <div class="f full"><label for="observaciones">Observaciones</label><textarea id="observaciones" placeholder="Cualquier cosa que debamos saber (opcional)"></textarea></div>
         </div>
       </section>
