@@ -400,9 +400,13 @@ footer a{color:inherit}
         <div class="grid">
           <div class="f"><label for="evento" class="req">Nombre del evento</label><input id="evento" required></div>
           <div class="f"><label for="recinto" class="req">Recinto / sala</label><input id="recinto" required></div>
-          <div class="f"><label for="ciudad" class="req">Ciudad</label><input id="ciudad" required autocomplete="address-level2"></div>
+          <div class="f"><label for="ciudad" class="req">Municipio</label><input id="ciudad" required autocomplete="address-level2"></div>
           <div class="f"><label for="provincia" class="req">Provincia</label><input id="provincia" required autocomplete="address-level1"></div>
-          <div class="f full"><label for="direccion" class="req">Dirección del recinto</label><input id="direccion" required placeholder="Calle, número, código postal y localidad"></div>
+          <div class="sub-h">Dirección del recinto</div>
+          <div class="f"><label for="dirVia" class="req">Tipo de vía</label><select id="dirVia"><option value="">Elige una…</option><option>Calle</option><option>Avenida</option><option>Plaza</option><option value="otro">Otro</option></select></div>
+          <div class="f" id="dirOtroBox" hidden><label for="dirOtro" class="req">¿Qué tipo de vía?</label><input id="dirOtro" placeholder="Ej.: Paseo, Camino, Carretera, Polígono"></div>
+          <div class="f"><label for="dirNombre" class="req">Nombre de la vía</label><input id="dirNombre" placeholder="Ej.: Motril"></div>
+          <div class="f"><label for="dirNumero" class="req">Número</label><input id="dirNumero" placeholder="Ej.: 234 · «s/n» si no tiene"></div>
         </div>
       </section>
 
@@ -485,7 +489,8 @@ footer a{color:inherit}
     <div class="artists" role="radiogroup" aria-label="Artista"></div>
     <div class="grid">
       <div class="f"><label class="req">Fecha de la actuación</label><input type="date" data-f="fechaEvento"></div>
-      <div class="f"><label class="req">Horario de la actuación</label><input data-f="horario" placeholder="Ej.: de 00:30 a 02:00 h"></div>
+      <div class="f"><label class="req">Hora de inicio de la actuación</label><input type="time" data-f="horaInicio"></div>
+      <div class="f"><label>Hora de fin de la actuación</label><input type="time" data-f="horaFin"><span class="hint fin">Si la dejas vacía, contamos 90 minutos desde el inicio</span></div>
       <div class="f"><label class="req">Fecha de la prueba de sonido</label><input type="date" data-f="fechaPrueba"><span class="hint">Por defecto, el mismo día de la actuación</span></div>
       <div class="f"><label class="req">Hora de la prueba de sonido</label><input type="time" data-f="horaPrueba" value="22:00"></div>
     </div>
@@ -538,9 +543,15 @@ function addAct(copiarDe){
   var fp = campo(node, "fechaPrueba"), fe = campo(node, "fechaEvento");
   node._pruebaManual = false;
   if(copiarDe){
-    ["fechaEvento","horario","fechaPrueba","horaPrueba"].forEach(function(f){ campo(node, f).value = campo(copiarDe, f).value; });
+    ["fechaEvento","horaInicio","horaFin","fechaPrueba","horaPrueba"].forEach(function(f){ campo(node, f).value = campo(copiarDe, f).value; });
     node._pruebaManual = copiarDe._pruebaManual;
   }
+  var hi = campo(node, "horaInicio"), hf = campo(node, "horaFin"), fin = node.querySelector(".fin");
+  var pintarFin = function(){ fin.textContent = !hi.value ? "Si la dejas vacía, contamos 90 minutos desde el inicio"
+    : "En el contrato: " + horarioTexto(hi.value, hf.value) + (hf.value ? "" : " (90 minutos)"); };
+  hi.addEventListener("input", function(){ pintarFin(); hi.classList.remove("bad"); });
+  hf.addEventListener("input", pintarFin);
+  pintarFin();
   fe.addEventListener("input", function(){ if(!node._pruebaManual) fp.value = fe.value; node.classList.remove("bad"); fe.classList.remove("bad"); });
   fp.addEventListener("input", function(){ node._pruebaManual = !!fp.value && fp.value !== fe.value; if(!fp.value){ fp.value = fe.value; node._pruebaManual = false; } });
   each("input[type=radio]", function(r){ r.addEventListener("change", function(){ node.querySelector(".who").textContent = nombreArtista(node); node.classList.remove("bad"); }); }, node);
@@ -556,6 +567,27 @@ $("add").addEventListener("click", function(){
   nuevo.scrollIntoView({behavior:"smooth", block:"start"});
 });
 
+// ---- Horario: hora de inicio + 90 minutos → «de 2:30 hasta las 4:00» ----
+var DURACION_MIN = 90;
+function hm(totalMin){ totalMin = ((totalMin % 1440) + 1440) % 1440; return Math.floor(totalMin / 60) + ":" + String(totalMin % 60).padStart(2, "0"); }
+function minutos(h){ if(!/^\d{1,2}:\d{2}$/.test(h || "")) return null; var p = h.split(":"); return Number(p[0]) * 60 + Number(p[1]); }
+// Con hora de fin: se usa tal cual. Sin hora de fin: inicio + 90 minutos.
+function horarioTexto(inicio, finH){
+  var a = minutos(inicio); if(a === null) return "";
+  var b = minutos(finH); if(b === null) b = a + DURACION_MIN;
+  return "de " + hm(a) + " hasta las " + hm(b);
+}
+
+// ---- Dirección del recinto: tipo de vía + nombre + número (+ municipio y provincia) ----
+$("dirVia").addEventListener("change", function(){ $("dirOtroBox").hidden = $("dirVia").value !== "otro"; if(this.value) this.classList.remove("bad"); });
+function direccionTexto(d){
+  var via = $("dirVia").value === "otro" ? $("dirOtro").value.trim() : $("dirVia").value;
+  var num = $("dirNumero").value.trim().replace(/^n[º°o.]?\s*/i, "");
+  num = /^s\/?n$/i.test(num) ? "s/n" : "nº " + num;
+  d.direccionVia = via; d.direccionNombre = $("dirNombre").value.trim(); d.direccionNumero = num;
+  return via + " " + d.direccionNombre + ", " + num + ", " + d.ciudad + (d.provincia ? " (" + d.provincia + ")" : "");
+}
+
 // ---- Cargo del firmante del ayuntamiento (texto que va al contrato) ----
 function cargoTexto(d){
   var f = d.trato === "Dña.";
@@ -566,13 +598,13 @@ function cargoTexto(d){
 }
 
 // ---- Envío ----
-var COMUNES = ["trato","promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","direccion","observaciones"];
+var COMUNES = ["trato","promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","observaciones"];
 var POR_TIPO = {
   sociedad: ["promEmpresa","promCif","promDomicilio"],
   autonomo: ["promDomicilio"],
   ayuntamiento: ["aytoMunicipio","aytoNif","aytoSede","partidaPresupuestaria","dir3OficinaContable","dir3OrganoGestor","dir3UnidadTramitadora"]
 };
-var OBLIG = ["promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","direccion"];
+var OBLIG = ["promNombre","promDni","promEmail","promMovil","evento","recinto","ciudad","provincia","dirVia","dirNombre","dirNumero"];
 var OBLIG_TIPO = { sociedad:["promEmpresa","promCif","promDomicilio"], autonomo:["promDomicilio"], ayuntamiento:["aytoMunicipio","aytoNif","aytoSede"] };
 
 $("frm").addEventListener("submit", function(ev){
@@ -581,22 +613,25 @@ $("frm").addEventListener("submit", function(ev){
   var campos = COMUNES.concat(POR_TIPO[t]);
   campos.forEach(function(k){ d[k] = $(k).value.trim(); });
   var oblig = OBLIG.concat(OBLIG_TIPO[t]);
+  if($("dirVia").value === "otro") oblig = oblig.concat(["dirOtro"]);
   if(t === "ayuntamiento" && $("cargoTipo").value === "concejal") oblig = oblig.concat(["cargoArea","decretoNum","decretoFecha"]);
   var primero = null, faltaArtista = false;
   each("#frm input, #frm select, #frm textarea", function(el){ el.classList.remove("bad"); });
   oblig.forEach(function(k){ if(!$(k).value.trim()){ $(k).classList.add("bad"); primero = primero || $(k); } });
   if(d.promEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.promEmail)){ $("promEmail").classList.add("bad"); primero = primero || $("promEmail"); }
   if(t === "ayuntamiento") d.firmanteCargo = cargoTexto(d);
+  d.direccion = direccionTexto(d);
 
   d.actuaciones = [];
   each(".act", function(a){
     var r = a.querySelector("input[type=radio]:checked");
     var x = { artistaSolicitado: r ? r.value : "" };
-    ["fechaEvento","horario","fechaPrueba","horaPrueba"].forEach(function(f){ x[f] = campo(a, f).value.trim(); });
+    ["fechaEvento","horaInicio","horaFin","fechaPrueba","horaPrueba"].forEach(function(f){ x[f] = campo(a, f).value.trim(); });
+    x.horario = horarioTexto(x.horaInicio, x.horaFin);
     if(!x.fechaPrueba) x.fechaPrueba = x.fechaEvento;
     var mal = false;
     if(!x.artistaSolicitado){ mal = true; faltaArtista = true; }
-    ["fechaEvento","horario","horaPrueba"].forEach(function(f){ if(!x[f]){ campo(a, f).classList.add("bad"); mal = true; } });
+    ["fechaEvento","horaInicio","horaPrueba"].forEach(function(f){ if(!x[f]){ campo(a, f).classList.add("bad"); mal = true; } });
     a.classList.toggle("bad", mal);
     if(mal) primero = primero || a;
     d.actuaciones.push(x);
